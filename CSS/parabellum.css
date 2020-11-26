@@ -1,0 +1,294 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'Open Sans', sans-serif;
+    padding: 0;
+    margin: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    max-width: 1920px;
+    max-height: 1080px;
+    width: 104%;
+    height: auto;
+    background-color: #d7ba9c;
+    background-image: url(../img/table.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position-x: center;
+    overflow: scroll;
+}
+
+.loader{
+    background-color: black;
+    opacity: 50%;
+    position: fixed;
+    width: 110vw;
+    height: 110vh;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+.container{
+    max-width: 70vw;
+    max-height: 70vh;
+    margin: 15vh -10vh 0 15vw;
+}
+
+.board{
+    height: 27vh;
+    position: relative;
+}
+
+.board .range{
+    height: 34%;
+    background: none;
+    border: none;
+    margin-bottom: -1px;
+    position: relative;
+    transition: 200ms;
+    padding: 5px;
+    text-align: center;
+}
+
+.board .range.highlight{
+    background: #e5faff;
+    border: 1px solid #b0cfd7;
+    z-index: 20;
+    cursor: pointer;
+}
+
+.board .range .counter{
+    position: absolute;
+    left: 20px;
+    top: 31px;
+    font-weight: bold;
+    font-size: 22px;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    text-align: center;
+    padding-top: 4px;
+}
+
+.board .range > .fa{
+        position: absolute;
+    right: 3vw;
+    top: 2.5vh;
+    font-size: 4vh;
+    color: rgba(0,0,0,0.25);
+    width: 5vw;
+}
+
+.clock-img{
+    margin: -5vh 0 0 70.5vw;
+    height: 12vh;
+    width: auto;
+    object-fit: contain;
+    position: absolute;
+    z-index: 100;
+}
+
+.board.player .counter{
+    background: #0d0057;
+}
+
+.board.opponent .counter{
+    background: #fbab64;
+}
+
+.board{
+    position: relative;
+    cursor: default;
+}
+
+.card{
+    height: 90px;
+    width: 75px;
+    background: #fff;
+    display: inline-block;
+    margin-right: -20px;
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    padding-top: 6px;
+    color: #000;
+    border-radius: 6px;
+    cursor: default;
+    transition: 200ms;
+    position: relative;
+    top: 0;
+}
+
+.card .fa{
+    display: block;
+}
+
+.card:last-child{
+    margin-right: 0;
+}
+
+.card label{
+    font-size: 8px;
+    display: block;
+}
+
+.card span.buff{
+    position: absolute;
+    top: 31px;
+    left: 12px;
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+    background: #89d934;
+}
+
+.card span.hit{
+    position: absolute;
+    top: 31px;
+    left: 12px;
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+    background: #fa4343;
+}
+
+.card .iden{
+    display: none;
+}
+
+.hand{
+    text-align: center;
+    height: 92px;
+}
+
+.player.hand{
+    position: relative;
+    margin-top: -10px;
+    z-index: 100;
+}
+
+.opponent.hand{
+    position: relative;
+    margin-bottom: -10px;
+    z-index: 100;
+    margin-top: -40px;
+}
+
+.opponent.hand .thinking{
+        position: absolute;
+    top: 50px;
+    left: 0;
+    font-size: 14px;
+    font-weight: bold;
+    display: none;
+}
+
+.your-turn, .opponent-turn{
+    position: absolute;
+    top: 20px;
+    left: 0;
+    font-size: 14px;
+    font-weight: bold;
+    display: none;
+}
+
+.your-turn{
+    color: #0d0057;
+    display: block;
+}
+.opponent-turn{
+    color: #ecad4b;
+}
+
+.hand .card{
+    box-shadow: 5px 5px 5px 1px #aaa;
+}
+
+.player.hand .card{
+    cursor: pointer;
+}
+
+.player.hand .card:hover, .player.hand .card.selected{
+    top: -10px;
+    box-shadow: 0px 4px 8px 0px #aaa;
+}
+
+.hand .card.selected{
+    background: #150283;
+    color: #fff;
+}
+
+.player .card{
+    border: 1px solid #0d0057;
+}
+
+.opponent .card{
+    border: 1px solid #ecad4b;
+}
+
+.total{
+    position: absolute;
+    font-size: 80px;
+    left: -100px;
+    font-weight: bold;
+    top: 82px;
+    width: 120px;
+    letter-spacing: -3px;
+    text-align: center;
+}
+
+.player .total{
+    color: #0d0057;
+}
+
+.opponent .total{
+    color: #fbab64;
+}
+
+.hand .card{
+    transform: rotate(-7deg);
+    margin-right: -15px;
+}
+
+.fa-spin{
+    animation: fa-spin 1s infinite linear;
+}
+
+.opponent.board .range.back{
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.player.board .range.back{
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.board .card.hit{
+    color: #fa4343;
+}
+
+.board .card.buffed{
+    color: #89d934;
+}
+
+.opponent.hand .card span, .opponent.hand .card .fa, .opponent.hand .card label{
+    display: none;
+}
+
+.button{
+    display: block;
+    width: 50px;
+    height: 60px;
+    border-radius: 25px;
+    background: aliceblue;
+}

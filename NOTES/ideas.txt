@@ -1,0 +1,7 @@
+Ideias para o ParaBellum:
+
+    - Função Restart()
+        - Limpar a mesa
+    - Player vs. Player
+    - Adicionar os novos efeitos
+    - Criar deck que diminui: https://love2dev.com/blog/javascript-remove-from-array/

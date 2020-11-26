@@ -1,0 +1,34 @@
+UPDATE LIST
+by André Melo & Douglas Speck
+
+These are the registers of all alterations (updates)
+we've done since we started the project
+
+* ------------------------------------------------------
+
+0.4.1.3 – We renamed noAccent to removeAccent.
+0.4.1.2 – We created auxiliar functions: noAccent, toLowerCase, toUpperCase.
+0.4.1   – We created an info alert that appears once you click twice at a card.
+0.4.0   – The game kind of started working: we already get the cards of the deck we choose and we can select them. However, we still can't place them in the board.
+
+0.3.3   – We organized the information of the cards.
+0.3.2   – We created a Sorting System.
+0.3.1.2 – We added a Prompt to choose your deck.
+0.3.1   – We created the Decks System.
+0.3.0   – We created the other Decks.
+
+0.2.1.2 – We edited the properties RANGE and EFFECT.
+0.2.1   – We added new properties to the cards: CLASS, FACTION and GROUP. 
+0.2.0.3 – We removed the function inGame because the code.
+0.2.0.2 – We created a primary deck (Zeus).
+0.2.0   – We added our own cards and organized the functions (setup, inGame and restart).
+
+0.1.3   – We added a proper space to the clock in the HTML.
+0.1.2   – We added the clocks elements (clock0.png to clock23.png).
+0.1.1.2 - Fixed the bug in which we could barely see anything because the folder was not specified.
+0.1.1   - We started to fix the turns system
+0.1.0.2 - Added the element clock0.png
+0.1.0   - We inserted the base of day/night system
+
+0.0.2   - We cutted off some parts
+0.0.1   - We copyed and pasted the code from HTML Gwent

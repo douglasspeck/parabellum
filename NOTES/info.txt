@@ -1,0 +1,49 @@
+CLASSES:
+    god         greatGod
+    minion      monster
+    spell       hero
+    titan
+
+FACTIONS:
+    zeus        jupiter
+    hades       plutao
+    atena       minerva
+    poseidon    netuno
+    ares        marte
+    neutral
+
+RANGES:
+    front       middle        back
+
+GROUPS:
+    amazon      fauno       gorgon
+    moira       parca       soul
+        
+EFFECTS:
+    bluefire        buff            burn
+    burn2           buy             buy4
+    call            caos            clearWind
+    convert         drain           edipo
+    evoke1          evoke2          evoke3
+    evoke4          freezeTime      gorgonDex
+    gorgonStr       gorgonWis       helmetHades
+    helmetPlutao    hero            moonlight
+    nexus           nice            revive
+    shield          sphinx          spy
+    steal           sunlight        wind
+    wineRain
+
+
+
+CARTAS NEUTRAS (GERAL):
+    2,6,9,10,11,14,15,23,27,28,31,35,36,37,
+    40,47,48,53,55,58,59,60,61,63,68,74,
+    79,80,82,87,88,89,91,92,98,108,124,125
+
+CARTAS NEUTRAS (GREGAS):
+    2,9,10,14,23,28,35,37,47,48,55,58,68,74,79,82,87,92,98,108,125
+
+CARTAS NEUTRAS (ROMANAS):
+    6,9,11,15,23,27,31,36,37,40,53,59,60,61,63,68,80,82,88,89,91,98,124
+
+https://web.archive.org/web/20181004003856/https://boag.online/playground/gwent/

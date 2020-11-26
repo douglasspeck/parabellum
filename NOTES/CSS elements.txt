@@ -1,0 +1,87 @@
+*{
+    box-sizing: border-box;   
+}
+
+body
+
+.loader
+
+.container
+
+.board.opponent
+
+.board .range
+
+.board .range.highlight
+
+.board .range .counter
+
+.board .range > .fa
+
+.middle.board
+
+.clock-img
+
+.board.player .counter
+
+.board.opponent .counter
+
+.board
+
+.card
+
+.card .fa
+
+.card:last-child
+
+.card label
+
+.card span.buff
+
+.card span.hit
+
+.hand
+
+.player.hand
+
+.opponent.hand
+
+.opponent.hand .thinking
+
+.your-turn, .opponent-turn
+
+.your-turn
+
+.opponent-turn
+
+.hand .card
+
+.player.hand .card
+
+.player.hand .card:hover, .player.hand .card.selected
+
+.hand .card.selected
+
+.player .card
+
+.opponent .card
+
+.total
+
+.player .total{
+
+.opponent .total
+
+.hand .card{
+
+.fa-spin{
+
+.opponent.board .range.long
+
+.player.board .range.long
+
+.board .card.hit
+
+.board .card.buffed
+
+.opponent.hand .card span, .opponent.hand .card .fa, .opponent.hand .card label
