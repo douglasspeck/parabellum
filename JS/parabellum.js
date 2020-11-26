@@ -59,7 +59,7 @@ function setup() {
         "clock23.png",
     ];
 
-    $('.clock').html(`<img class="clock-img" src="/img/${clockPic[gameTime]}">`);
+    $('.clock').html(`<img class="clock-img" src="img/${clockPic[gameTime]}">`);
 
     //#endregion -------------------------------------------------- */
     
