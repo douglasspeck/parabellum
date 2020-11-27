@@ -7,6 +7,15 @@ var multi = 0.3;
 var multi_Str = 1;
 var multi_Dex = 1;
 var emptyPlay = 0;
+var opponent_back=0;
+var opponent_middle=0;
+var opponent_front=0;
+var opponent_total=0;
+var player_back=0;
+var player_middle=0;
+var player_front=0;
+var player_total=0;
+var myAttributes;
 //#endregion ------------------------------------------------------ */
 
 $(document).ready(function(){
@@ -379,7 +388,7 @@ function setup() {
 
     //#endregion -------------------------------------------------- */
 
-    //#region -------- Skip Turn -------- */
+    //#region --------------------- Skip Turn --------------------- */
 
     function clicker() {
         emptyPlay++;
@@ -390,7 +399,7 @@ function setup() {
         clicker();
     });
 
-    //#endregion ------------ */
+    //#endregion -------------------------------------------------- */
 
     //#region ------ Play Card when You Click Allowable Range ----- */
 
@@ -410,6 +419,8 @@ function setup() {
 
             $('.player.board .'+getRange+'.range').append(drawCard(getCard));
             console.log('player draws card');
+
+            emptyPlay = 0;
 
             //#region ----------------------- EFFECTS --------------------- */
             
@@ -455,66 +466,74 @@ function setup() {
 
         setTimeout(function(){
 
-            if (turnNum < 5){
-                // play no effect cards if possible, let some build up first
+            if(opponent_total > player_total || $('.opponent.hand').length == 0) {
+                emptyPlay++;
+            } else {
 
-                $('.opponent.hand .card').each(function(){
-                    var thisId = parseInt($(this).data('cardid'));
-                    if(card[thisId].effect==''){
-                        $(this).addClass('possible');
+                if (turnNum < 5){
+                    // play no effect cards if possible, let some build up first
+
+                    $('.opponent.hand .card').each(function(){
+                        var thisId = parseInt($(this).data('cardid'));
+                        if(card[thisId].effect==''){
+                            $(this).addClass('possible');
+                        }
+                    });
+
+                    var numPossibles = $('.opponent.hand .card.possible').length;
+
+                    if (numPossibles == "0"){
+                        console.log('opponent playing random card');
+                        // Just play a random card
+                        var playThisCard = Math.floor(Math.random() * numCards) + 1;
+                        var getCard = $('.opponent.hand .card:nth-of-type('+playThisCard+')').data('cardid');
+                        $('.opponent.hand .card:nth-of-type('+playThisCard+')').remove();
+                    }else{
+                        console.log('opponent playing blank card');
+                        // Play one of the possibles
+                        var getCard = $('.opponent.hand .card.possible:first').data('cardid');
+                        $('.opponent.hand .card.possible:first').remove();
                     }
-                });
 
-                var numPossibles = $('.opponent.hand .card.possible').length;
-
-                if (numPossibles == "0"){
-                    console.log('opponent playing random card');
-                    // Just play a random card
-                    var playThisCard = Math.floor(Math.random() * numCards) + 1;
-                    var getCard = $('.opponent.hand .card:nth-of-type('+playThisCard+')').data('cardid');
-                    $('.opponent.hand .card:nth-of-type('+playThisCard+')').remove();
                 }else{
-                    console.log('opponent playing blank card');
-                    // Play one of the possibles
-                    var getCard = $('.opponent.hand .card.possible:first').data('cardid');
-                    $('.opponent.hand .card.possible:first').remove();
+                    // start firing out the special cards (although go blank if that's all that's left)
+
+                    $('.opponent.hand .card').each(function(){
+                        var thisId = parseInt($(this).data('cardid'));
+                        if(card[thisId].effect=!''){
+                            $(this).addClass('possible');
+                        }
+                    });
+
+                    var numPossibles = $('.opponent.hand .card.possible').length;
+
+                    if (numPossibles == "0"){
+                        console.log('opponent playing random card');
+                        // Just play a random card
+                        var playThisCard = Math.floor(Math.random() * numCards) + 1;
+                        var getCard = $('.opponent.hand .card:nth-of-type('+playThisCard+')').data('cardid');
+                        $('.opponent.hand .card:nth-of-type('+playThisCard+')').remove();
+                    }else{
+                        console.log('opponent playing attack or buff card');
+                        // Play one of the possibles
+                        var getCard = $('.opponent.hand .card.possible:first').data('cardid');
+                        $('.opponent.hand .card.possible:first').remove();
+                    }
+
                 }
 
-            }else{
-                // start firing out the special cards (although go blank if that's all that's left)
+                $('.opponent.hand .card').removeClass('possible');
 
-                $('.opponent.hand .card').each(function(){
-                    var thisId = parseInt($(this).data('cardid'));
-                    if(card[thisId].effect=!''){
-                        $(this).addClass('possible');
-                    }
-                });
+                getCard = parseInt(getCard);
+                var getRange = card[getCard].range;
+                var getEffect = card[getCard].effect;
 
-                var numPossibles = $('.opponent.hand .card.possible').length;
+                $('.opponent.board .'+getRange).append(drawCard(card[getCard]));
+                console.log('opponent draws card');
 
-                if (numPossibles == "0"){
-                    console.log('opponent playing random card');
-                    // Just play a random card
-                    var playThisCard = Math.floor(Math.random() * numCards) + 1;
-                    var getCard = $('.opponent.hand .card:nth-of-type('+playThisCard+')').data('cardid');
-                    $('.opponent.hand .card:nth-of-type('+playThisCard+')').remove();
-                }else{
-                    console.log('opponent playing attack or buff card');
-                    // Play one of the possibles
-                    var getCard = $('.opponent.hand .card.possible:first').data('cardid');
-                    $('.opponent.hand .card.possible:first').remove();
-                }
+                emptyPlay = 0;
 
             }
-
-            $('.opponent.hand .card').removeClass('possible');
-
-            getCard = parseInt(getCard);
-            var getRange = card[getCard].range;
-            var getEffect = card[getCard].effect;
-
-            $('.opponent.board .'+getRange).append(drawCard(card[getCard]));
-            console.log('opponent draws card');
             
             dayNight();
             $('.clock').html(`<img class="clock-img" src="img/${clockPic[gameTime]}">`);
@@ -526,22 +545,15 @@ function setup() {
             $('.opponent .thinking').hide();
             $('.your-turn').show();
             $('.opponent-turn').hide();
-    
-            if(parseInt($('.player.board .total').text()) > 1000 && parseInt($('.opponent.board .total').text()) > 1000){
+
+            if (emptyPlay >= 2) {
                 if(parseInt($('.player.board .total').text()) > parseInt($('.opponent.board .total').text())){
                     alert('Fim de Jogo! Você venceu!');
                 }else if(parseInt($('.opponent.board .total').text()) > parseInt($('.player.board .total').text())){
                     alert('Fim de jogo! Você perdeu!');
-                }else{
-                    alert('Fim de jogo! É um empate!');
-                }
-            }else if(parseInt($('.player.board .total').text()) > 1000){
-                alert('Fim de Jogo! Você venceu!');
-            }else if(parseInt($('.opponent.board .total').text()) > 1000){
-                alert('Fim de jogo! Você perdeu!');
-            }
+            }};
 
-        },thinkTime);
+        },thinkTime)
 
         turnNum++;
 
@@ -576,16 +588,15 @@ function setup() {
 
     function updateScores(){
 
-        var opponent_back=0;
-        var opponent_middle=0;
-        var opponent_front=0;
-        var opponent_total=0;
-        var player_back=0;
-        var player_middle=0;
-        var player_front=0;
-        var player_total=0;
-        var myAttributes;
-        
+        opponent_back=0;
+        opponent_middle=0;
+        opponent_front=0;
+        opponent_total=0;
+        player_back=0;
+        player_middle=0;
+        player_front=0;
+        player_total=0;
+
         $('.opponent.board .back.range .card').each(function(){
             myAttributes = Math.floor(card[$(this).data('cardid')].str * multi_Str) + Math.floor(card[$(this).data('cardid')].dex * multi_Dex) + card[$(this).data('cardid')].wis;
             opponent_back = opponent_back + myAttributes;
