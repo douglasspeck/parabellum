@@ -4,8 +4,9 @@ var turnNum = 1;
 var dayCycle = true;
 var gameTime = 7;
 var multi = 0.3;
-var multi_Str = 0.93;
-var multi_Dex = 1.2;
+var multi_Str = 1;
+var multi_Dex = 1;
+var emptyPlay = 0;
 //#endregion ------------------------------------------------------ */
 
 $(document).ready(function(){
@@ -15,13 +16,19 @@ $(document).ready(function(){
 //#region ------------------ DAY-NIGHT SYSTEM ----------------- */
 
 function dayNight() {
-    if(gameTime <= 13){
+    if(gameTime > 0 && gameTime <= 13){
         multi_Str = 1 + (multi * (gameTime-7) / 6);
         multi_Dex = 1 + (multi * (7-gameTime) / 6);
-    }
-    else {
+    } else if(gameTime > 13) {
         multi_Dex = 1 + (multi * (gameTime-19) / 6);
-        multi_Str = 1 + (multi * (13+gameTime) / 12);
+        multi_Str = 1 + (multi * (19-gameTime) / 6);
+    } else if(gameTime == 0) {
+        multi_Dex = 1 + (multi * (5) / 6);
+        multi_Str = 1 + (multi * (-5) / 6);
+    } else {
+        multi_Dex = 1;
+        multi_Str = 1;
+        alert("Algo não está certo. Os multiplicadores foram redefinidos para 1.");
     }
 }
 
@@ -33,30 +40,7 @@ function setup() {
 
     var clockPic = new Array();
     clockPic = [
-        "clock0.png",
-        "clock1.png",
-        "clock2.png",
-        "clock3.png",
-        "clock4.png",
-        "clock5.png",
-        "clock6.png",
-        "clock7.png",
-        "clock8.png",
-        "clock9.png",
-        "clock10.png",
-        "clock11.png",
-        "clock12.png",
-        "clock13.png",
-        "clock14.png",
-        "clock15.png",
-        "clock16.png",
-        "clock17.png",
-        "clock18.png",
-        "clock19.png",
-        "clock20.png",
-        "clock21.png",
-        "clock22.png",
-        "clock23.png",
+        "clock0.png","clock1.png","clock2.png","clock3.png","clock4.png","clock5.png","clock6.png","clock7.png","clock8.png","clock9.png","clock10.png","clock11.png","clock12.png","clock13.png","clock14.png","clock15.png","clock16.png","clock17.png","clock18.png","clock19.png","clock20.png","clock21.png","clock22.png","clock23.png",
     ];
 
     $('.clock').html(`<img class="clock-img" src="img/${clockPic[gameTime]}">`);
@@ -270,16 +254,18 @@ function setup() {
             13,32,46,49,62,83,107,113,
             6,9,11,15,23,27,31,36,37,40,53,59,60,61,63,68,80,82,88,89,91,98,124];   // Marte
 
-    var myDeck = new Array();
+    var builtDeck = new Array();
     for(var i=0;i<deck.length;i++) {
-        myDeck[i] = new Array();
+        builtDeck[i] = new Array();
         for(var j=0;j<deck[i].length;j++) {
             var cardNumber = deck[i][j];
-            myDeck[i][j] = card[cardNumber];
+            builtDeck[i][j] = card[cardNumber];
         }
     }
 
     var chosenDeck = 0;
+    var playerDeck = new Array();
+    
     function chooseFaction() {
         var choice = prompt(
             'Escolha sua Facção:\n 0 – Zeus\n 1 – Júpiter\n 2 – Hades\n 3 – Plutão\n 4 – Atena\n 5 – Minerva\n 6 – Poseidon\n 7 – Netuno\n 8 – Ares\n 9 – Marte','Insira um número de 0 a 9');
@@ -287,6 +273,7 @@ function setup() {
             txt = "Você escolheu a facção de " + fac[choice] + ".";
             alert(txt);
             chosenDeck = choice;
+            playerDeck = builtDeck[chosenDeck];
         } else {
             txt = "Algo deu errado. Insira um número de 0 a 9";
             alert(txt);
@@ -294,48 +281,37 @@ function setup() {
         };
     }
     chooseFaction();
-    var opponentDeck = 6;
+
+    var opponentDeck = new Array();
+
+    var opponentNum = 0;
+    function opponentFaction() {
+        opponentNum = Math.floor(Math.random() * deck.length);
+        if (opponentNum == chosenDeck) {
+            opponentFaction();
+        } else {}
+        opponentDeck = builtDeck[opponentNum];
+    }
+    opponentFaction();
 
     //#endregion -------------------------------------------------- */
 
     //#region --------------------- Sort Cards -------------------- */
 
     var l,m,n;
-    for(l=0; l<myDeck[chosenDeck].length; l++) {
+    for(l=0; l<playerDeck.length; l++) {
         m = Math.floor(Math.random() * l);
-        n = myDeck[chosenDeck][l];
-        myDeck[chosenDeck][l] = myDeck[chosenDeck][m];
-        myDeck[chosenDeck][m] = n;
+        n = playerDeck[l];
+        playerDeck[l] = playerDeck[m];
+        playerDeck[m] = n;
     }
-    for(l=0; l<myDeck[opponentDeck].length; l++) {
+    for(l=0; l<opponentDeck.length; l++) {
         m = Math.floor(Math.random() * l);
-        n = myDeck[opponentDeck][l];
-        myDeck[opponentDeck][l] = myDeck[opponentDeck][m];
-        myDeck[opponentDeck][m] = n;
+        n = opponentDeck[l];
+        opponentDeck[l] = opponentDeck[m];
+        opponentDeck[m] = n;
     }
 
-    //#endregion -------------------------------------------------- */
-
-    //#region --------------------- Deal Hands -------------------- */
-
-    var numberOfCards = 10;
-    var n = 0;
-    while(n < numberOfCards){
-        var cardId = myDeck[opponentDeck][n];
-        
-        $('.opponent.hand').append(drawCard(cardId));
-        console.log('opponent draws card '+cardId.name);
-        n++;
-    }
-    n = 0;
-    while(n < numberOfCards){
-        var cardId = myDeck[chosenDeck][n];
-
-        $('.player.hand').append(drawCard(cardId));
-        console.log('player draws card '+cardId.name);
-        n++;
-    }
-    
     //#endregion -------------------------------------------------- */
 
     //#region ---------------- Return Card Graphics --------------- */
@@ -349,20 +325,45 @@ function setup() {
 
     //#endregion -------------------------------------------------- */
 
+    //#region --------------------- Deal Hands -------------------- */
+
+    var numberOfCards = 10;
+    var n = 0;
+    while(n < numberOfCards){
+        $('.opponent.hand').append(drawCard(opponentDeck[1]));
+        opponentDeck.shift();
+        console.log('opponent draws card '+opponentDeck[1].name);
+        n++;
+    }
+    n = 0;
+    while(n < numberOfCards){
+        $('.player.hand').append(drawCard(playerDeck[1]));
+        playerDeck.shift();
+        console.log('player draws card '+playerDeck[1].name);
+        n++;
+    }
+    
+    //#endregion -------------------------------------------------- */
+
     //#region --- Select a Card and Highlight where it can play --- */
+
+    function showInfo(which) {
+        var info = 
+                toUnicodeVariant(toUpperCase(removeAccent(card[which.data('cardid')].name)), 'b') + "\n" +
+                "Facção: " + faction[card[which.data('cardid')].id] + "\n" +
+                "Fileira: " + range[card[which.data('cardid')].range] + "\n" + "\n" +
+                toUnicodeVariant("Atributos:",'b') + "\n" +
+                "Força: " + card[which.data('cardid')].str + " • " + multi_Str + " = " + Math.floor(card[which.data('cardid')].str * multi_Str) + "\n" +
+                "Destreza: " + card[which.data('cardid')].dex + " • " + multi_Dex + " = " + Math.floor(card[which.data('cardid')].dex * multi_Dex) + "\n" +
+                "Sabedoria: " + card[which.data('cardid')].wis + "\n" + "\n" +
+                "DESCRIÇÃO: " + card[which.data('cardid')].description;
+            alert(info);
+    }
 
     $('.player.hand').on('click','.card',function(){
 
         if($(this).hasClass('selected')) {
-            var info = 
-                toUnicodeVariant(toUpperCase(removeAccent(card[$(this).data('cardid')].name)), 'bold') + "\n" +
-                "Facção: " + faction[card[$(this).data('cardid')].id] + "\n" +
-                "Fileira: " + range[card[$(this).data('cardid')].range] + "\n" + "\n" +
-                toUnicodeVariant("Atributos:",'bold') + "\n" +
-                "Força: " + card[$(this).data('cardid')].str + " • " + multi_Str + " = " + Math.floor(card[$(this).data('cardid')].str * multi_Str) + "\n" +
-                "Destreza: " + card[$(this).data('cardid')].dex + " • " + multi_Dex + " = " + Math.floor(card[$(this).data('cardid')].dex * multi_Dex) + "\n" +
-                "Sabedoria: " + card[$(this).data('cardid')].wis + "\n";
-            alert(info);
+            showInfo($(this));
         } else {
             $('.card').removeClass('selected');
             $(this).addClass('selected');
@@ -372,7 +373,24 @@ function setup() {
         }
     });
 
+    $('.board').on('click','.card',function(){
+        showInfo($(this));
+    });  
+
     //#endregion -------------------------------------------------- */
+
+    //#region -------- Skip Turn -------- */
+
+    function clicker() {
+        emptyPlay++;
+        runOpponentTurn();
+    }
+
+    $('.turn').on('click', function(){
+        clicker();
+    });
+
+    //#endregion ------------ */
 
     //#region ------ Play Card when You Click Allowable Range ----- */
 
@@ -384,7 +402,6 @@ function setup() {
             var getRange = card[$('.card.selected').data('cardid')].range;
             var getEffect = card[$('.card.selected').data('cardid')].effect;
 
-            $('.clock').html(`<img class="clock-img" src="/img/${clockPic[gameTime]}">`);
             console.log('this is turn '+turnNum);
 
             $('.player.board .range').removeClass('highlight');
@@ -395,6 +412,23 @@ function setup() {
             console.log('player draws card');
 
             //#region ----------------------- EFFECTS --------------------- */
+            
+            /*
+            
+            if(getCard.effect =! "") {
+                window[getCard.effect]();
+            }
+            
+            function burn(){
+                                
+            }
+            
+            function call(){
+
+            } 
+            
+            */
+
             //#endregion -------------------------------------------------- */
 
             runOpponentTurn();
@@ -409,10 +443,6 @@ function setup() {
     //#region ------------------ Opponnent's turn ----------------- */
 
     function runOpponentTurn(){
-
-        var cardId = Math.floor(Math.random() * myDeck[opponentDeck].length);
-        $('.opponent.hand').append(drawCard(myDeck[opponentDeck][cardId]));
-        console.log('opponent draws card');
 
         allowTurn = false;
         $('.your-turn').hide();
@@ -485,19 +515,19 @@ function setup() {
 
             $('.opponent.board .'+getRange).append(drawCard(card[getCard]));
             console.log('opponent draws card');
-
+            
+            dayNight();
+            $('.clock').html(`<img class="clock-img" src="img/${clockPic[gameTime]}">`);
+    
             updateScores();
-
+    
             allowTurn = true;
             $('.opponent-overlay').hide();
             $('.opponent .thinking').hide();
             $('.your-turn').show();
             $('.opponent-turn').hide();
-
-            var cardId = Math.floor(Math.random() * myDeck[chosenDeck].length);
-            $('.player.hand').append(drawCard  (myDeck[chosenDeck][cardId]));
-
-            if(parseInt($('.player.board .total').text()) > 199 && parseInt($('.opponent.board .total').text()) > 199){
+    
+            if(parseInt($('.player.board .total').text()) > 1000 && parseInt($('.opponent.board .total').text()) > 1000){
                 if(parseInt($('.player.board .total').text()) > parseInt($('.opponent.board .total').text())){
                     alert('Fim de Jogo! Você venceu!');
                 }else if(parseInt($('.opponent.board .total').text()) > parseInt($('.player.board .total').text())){
@@ -505,9 +535,9 @@ function setup() {
                 }else{
                     alert('Fim de jogo! É um empate!');
                 }
-            }else if(parseInt($('.player.board .total').text()) > 150){
+            }else if(parseInt($('.player.board .total').text()) > 1000){
                 alert('Fim de Jogo! Você venceu!');
-            }else if(parseInt($('.opponent.board .total').text()) > 150){
+            }else if(parseInt($('.opponent.board .total').text()) > 1000){
                 alert('Fim de jogo! Você perdeu!');
             }
 
@@ -522,6 +552,22 @@ function setup() {
             gameTime=0;
         }
 
+        $('.player.board .card').each(function(){
+            thisId = parseInt($(this).data('cardid'));
+            getCard = card[thisId];
+            getRange = getCard.range;
+            $(this).remove();
+            $('.player.board .'+getRange+'.range').append(drawCard(getCard));
+        });
+        $('.opponent.board .card').each(function(){
+            thisId = parseInt($(this).data('cardid'));
+            getCard = card[thisId];
+            getRange = getCard.range;
+            $(this).remove();
+            $('.opponent.board .'+getRange+'.range').append(drawCard(getCard));
+        });
+
+        updateScores();
     }
 
     //#endregion -------------------------------------------------- */
@@ -579,8 +625,10 @@ function setup() {
         $('.player.board .middle.range .counter').text(player_middle);
         $('.player.board .front.range .counter').text(player_front);
         $('.player .total').text(player_total);
+    }
 
     //#endregion ------------------------------------------------------ */
+    
 
 };
 
@@ -652,5 +700,122 @@ function toUpperCase(str) {
     return novastr;
 }
 
-//#endregion ------------------------------------------------------ */
+
+// Original source from the following script: [https://rawgit.com/davidkonrad/toUnicodeVariant/master/toUnicodeVariant.js]
+function toUnicodeVariant(str, variant, flags) {
+
+	const offsets = {
+	  m: [0x1d670, 0x1d7f6],
+	  b: [0x1d400, 0x1d7ce],
+	  i: [0x1d434, 0x00030],
+	  bi: [0x1d468, 0x00030],
+	  c: [0x1d49c, 0x00030],
+	  bc: [0x1d4d0, 0x00030],
+	  g: [0x1d504, 0x00030],
+	  d: [0x1d538, 0x1d7d8],
+	  bg: [0x1d56c, 0x00030],
+	  s: [0x1d5a0, 0x1d7e2],
+	  bs: [0x1d5d4, 0x1d7ec],
+	  is: [0x1d608, 0x00030],
+	  bis: [0x1d63c, 0x00030],
+		o: [0x24B6, 0x2460], 
+		p: [0x249C, 0x2474], 
+		w: [0xff21, 0xff10],
+		u: [0x2090, 0xff10]
+	}
+
+	const variantOffsets = {
+		'monospace': 'm',
+		'bold' : 'b',
+		'italic' : 'i',
+		'bold italic' : 'bi',
+		'script': 'c',
+		'bold script': 'bc',
+		'gothic': 'g',
+		'gothic bold': 'bg',
+		'doublestruck': 'd',
+		'sans': 's',
+		'bold sans' : 'bs',
+		'italic sans': 'is',
+		'bold italic sans': 'bis',
+		'parenthesis': 'p',
+		'circled': 'o',
+		'fullwidth': 'w'
+	}
+
+	// special characters (absolute values)
+	var special = {
+	  m: {
+	    ' ': 0x2000,
+	    '-': 0x2013
+	  },
+	  i: {
+	    'h': 0x210e
+	  },
+	  g: {
+	    'C': 0x212d,
+	    'H': 0x210c,
+	    'I': 0x2111,
+	    'R': 0x211c,
+	    'Z': 0x2128
+	  },
+		o: {
+			'0': 0x24EA,
+			'1': 0x2460,
+			'2': 0x2461,
+			'3': 0x2462,
+			'4': 0x2463,
+			'5': 0x2464,
+			'6': 0x2465,
+			'7': 0x2466,
+			'8': 0x2467,
+			'9': 0x2468,
+		},
+		p: {},
+		w: {}
+	}
+	//support for parenthesized latin letters small cases 
+	for (var i = 97; i <= 122; i++) {
+		special.p[String.fromCharCode(i)] = 0x249C + (i-97)
+	}
+	//support for full width latin letters small cases 
+	for (var i = 97; i <= 122; i++) {
+		special.w[String.fromCharCode(i)] = 0xff41 + (i-97)
+	}
+
+	const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+	const numbers = '0123456789';
+
+	var getType = function(variant) {
+		if (variantOffsets[variant]) return variantOffsets[variant]
+		if (offsets[variant]) return variant;
+		return 'm'; //monospace as default
+	}
+	var getFlag = function(flag, flags) {
+		if (!flags) return false
+		return flags.split(',').indexOf(flag)>-1
+	}
+
+	var type = getType(variant);
+	var underline = getFlag('underline', flags);
+	var strike = getFlag('strike', flags);
+  var result = '';
+
+  for (var k of str) {
+    let index
+    let c = k
+    if (special[type] && special[type][c]) c = String.fromCodePoint(special[type][c])
+    if (type && (index = chars.indexOf(c)) > -1) {
+      result += String.fromCodePoint(index + offsets[type][0])
+    } else if (type && (index = numbers.indexOf(c)) > -1) {
+      result += String.fromCodePoint(index + offsets[type][1])
+    } else {
+      result += c
+    }
+    if (underline) result += '\u0332' // add combining underline
+    if (strike) result += '\u0336' // add combining strike
+  }
+	return result	
 }
+
+//#endregion ------------------------------------------------------ */
