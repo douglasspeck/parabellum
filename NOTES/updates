@@ -6,6 +6,23 @@ we've done since we started the project
 
 * ------------------------------------------------------
 
+ALPHA VERSIONS:
+
+0.7.2.2 – We temporarily turned the effects region into comments.
+0.7.2   – We started some effects.
+0.7.1   – We fixed the mistakes that happened because of the skip function.
+0.7.0   – We added a skip button.
+
+0.6.2   - We copy-pasted the toUnicodeVariant function from its source since it wasn't working properly.
+0.6.1   – We updated the day/night system, so now the multipliers work properly.
+0.6.0   – We published the game in GitHub [http://douglasspeck.github.io/parabellum/].
+
+PRE-ALPHA VERSIONS:
+
+0.5.1.2 – We fixed all the general bugs so the game could work in fact.
+0.5.1   – We fixed the counting system.
+0.5.0   – We changed the click-to-play system.
+
 0.4.1.3 – We renamed noAccent to removeAccent.
 0.4.1.2 – We created auxiliar functions: noAccent, toLowerCase, toUpperCase.
 0.4.1   – We created an info alert that appears once you click twice at a card.
